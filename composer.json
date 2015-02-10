@@ -1,0 +1,28 @@
+{
+    "name": "acvos/bubbles",
+    "type": "library",
+    "description": "Bubbles DI container",
+    "keywords": ["DI", "container"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Anton Chernikov",
+            "email": "achernikov@acvos.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "require-dev": {
+        "phing/phing": "2.*"
+    },
+    "autoload": {
+        "psr-0": { "Acvos\\": "src/" }
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "master"
+        }
+    }
+}

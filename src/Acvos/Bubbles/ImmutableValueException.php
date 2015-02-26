@@ -9,22 +9,13 @@
  */
 namespace Acvos\Bubbles;
 
+use \RuntimeException;
+
 /**
- * Descriptor builder
+ * Runtime error: attempt to change immutable value
  *
  * @author Anton Chernikov <achernikov@acvos.com>
  */
-interface DescriptorBuilderInterface
+class ImmutableValueException extends RuntimeException
 {
-    /**
-     * Initiates configuration process
-     * @return $this
-     */
-    public function clear();
-
-    /**
-     * Returns the new descriptor
-     * @return DescriptorInterface
-     */
-    public function build();
 }

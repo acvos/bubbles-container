@@ -23,6 +23,21 @@ class Container implements ContainerInterface
     private $scope = [];
 
     /**
+     * Default descriptor factory
+     * @var DescriptorFactoryInterface
+     */
+    private $defaultDescriptorFacotry;
+
+    /**
+     * Constructor
+     * @param DescriptorFactoryInterface $defaultDescriptorFacotry Default descriptor factory
+     */
+    public function __construct(DescriptorFactoryInterface $defaultDescriptorFacotry)
+    {
+        $this->defaultDescriptorFacotry = $defaultDescriptorFacotry;
+    }
+
+    /**
      * Normalizes name string
      * @param  string $name Name
      * @return string
@@ -35,7 +50,7 @@ class Container implements ContainerInterface
     /**
      * {@inheritdoc}
      */
-    public function describe($name, DescriptorInterface $descriptor)
+    public function register($name, DescriptorInterface $descriptor)
     {
         $name = $this->normalizeName($name);
         $this->scope[$name] = $descriptor;
@@ -55,5 +70,20 @@ class Container implements ContainerInterface
         $descriptor = $this->scope[$name];
 
         return $descriptor->resolve($this);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function set($name, $value)
+    {
+        if (isset($this->scope[$name])){
+            throw new ImmutableValueException("Container content is immutable: $name");
+        }
+
+        $descriptor = $this->defaultDescriptorFacotry->create([$value]);
+        $this->register($name, $descriptor);
+
+        return $this;
     }
 }

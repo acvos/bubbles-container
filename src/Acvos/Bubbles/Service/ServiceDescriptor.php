@@ -7,7 +7,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Acvos\Bubbles;
+namespace Acvos\Bubbles\Service;
+
+use Acvos\Bubbles\DescriptorInterface;
+use Acvos\Bubbles\ContainerInterface;
+use Acvos\Bubbles\ImmutableValueException;
 
 /**
  * Service configuration
@@ -23,7 +27,7 @@ class ServiceDescriptor implements DescriptorInterface
     private $instance;
 
     /**
-     * Service factory
+     * Service factory (immutable)
      * @var FactoryInterface
      */
     private $factory;
@@ -35,12 +39,33 @@ class ServiceDescriptor implements DescriptorInterface
     private $dependencies = [];
 
     /**
-     * Constructor
-     * @param string $className Service class name
+     * Defines service factory based on given service class name
+     * @param  string $className Service class name
+     * @return $this
      */
-    public function __construct($className)
+    public function setClass($className)
     {
-        $this->factory = new SequentialBindingFactory((string) $className);
+        $factory = new SequentialBindingFactory((string) $className);
+        $this->setFactory($factory);
+
+        return $this;
+    }
+
+    /**
+     * Sets service factory
+     * @param  ServiceFactoryInterface $factory Service factory
+     * @return $this
+     * @throws ImmutableValueException If factory has been already set
+     */
+    public function setFactory(ServiceFactoryInterface $factory)
+    {
+        if ($this->factory !== null) {
+            throw new ImmutableValueException("Service factory has been already set");
+        }
+
+        $this->factory = $factory;
+
+        return $this;
     }
 
     /**
@@ -69,6 +94,10 @@ class ServiceDescriptor implements DescriptorInterface
      */
     public function setDependency($name, DescriptorInterface $descriptor)
     {
+        if (isset($this->dependencies[(string) $name])) {
+            throw new ImmutableValueException("Service dependencies are immutable");
+        }
+
         $this->dependencies[(string) $name] = $descriptor;
 
         return $this;

@@ -10,21 +10,16 @@
 namespace Acvos\Bubbles;
 
 /**
- * Descriptor builder
+ * Descriptor factory
  *
  * @author Anton Chernikov <achernikov@acvos.com>
  */
-interface DescriptorBuilderInterface
+interface DescriptorFactoryInterface
 {
     /**
-     * Initiates configuration process
-     * @return $this
+     * Produces new descriptor
+     * @param  array  $arguments Constructor arguments
+     * @return object
      */
-    public function clear();
-
-    /**
-     * Returns the new descriptor
-     * @return DescriptorInterface
-     */
-    public function build();
+    public function create(array $arguments = []);
 }

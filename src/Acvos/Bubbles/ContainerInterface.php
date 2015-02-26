@@ -22,7 +22,7 @@ interface ContainerInterface
      * @param  DescriptorInterface $descriptor descriptor object
      * @return $this
      */
-    public function describe($name, DescriptorInterface $descriptor);
+    public function register($name, DescriptorInterface $descriptor);
 
     /**
      * Finds and evaluates descriptor in this container
@@ -31,4 +31,13 @@ interface ContainerInterface
      * @throws DescriptorNotFoundException If there is no descriptor bound to given name
      */
     public function get($name);
+
+    /**
+     * Binds given name to a given value
+     * @param string $name  local name
+     * @param mixed  $value value to bind to the name
+     * @return $this
+     * @throws DescriptorNotFoundException If there is no descriptor bound to given name
+     */
+    public function set($name, $value);
 }

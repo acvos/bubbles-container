@@ -1,7 +1,7 @@
 {
     "name": "acvos/bubbles",
     "type": "library",
-    "description": "Bubbles DI container",
+    "description": "Bubbles DI Container",
     "keywords": ["DI", "container"],
     "license": "MIT",
     "authors": [
@@ -14,7 +14,12 @@
         "php": ">=5.4.0"
     },
     "require-dev": {
-        "phing/phing": "2.*"
+        "phing/phing": "2.*",
+        "phploc/phploc": "2.*@dev",
+        "phpmd/phpmd": "2.*",
+        "sebastian/phpcpd": "1.4.*",
+        "pdepend/pdepend": "2.*",
+        "squizlabs/php_codesniffer": "2.*"
     },
     "autoload": {
         "psr-0": { "Acvos\\": "src/" }
@@ -24,5 +29,8 @@
         "branch-alias": {
             "dev-master": "master"
         }
+    },
+    "config": {
+        "bin-dir": "bin"
     }
 }

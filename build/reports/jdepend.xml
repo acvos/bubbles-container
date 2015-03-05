@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PDepend>
+  <Packages>
+    <Package name="Acvos\Bubbles">
+      <Stats>
+        <TotalClasses>8</TotalClasses>
+        <ConcreteClasses>5</ConcreteClasses>
+        <AbstractClasses>3</AbstractClasses>
+        <Ca>1</Ca>
+        <Ce>2</Ce>
+        <A>0.375</A>
+        <I>0.66666666666667</I>
+        <D>0.041666666666667</D>
+      </Stats>
+      <ConcreteClasses>
+        <Class sourceFile="/Users/acvos/Documents/Projects/Bubbles/php/src/Acvos/Bubbles/Container.php">Container</Class>
+        <Class sourceFile="/Users/acvos/Documents/Projects/Bubbles/php/src/Acvos/Bubbles/ContainerManager.php">ContainerManager</Class>
+        <Class sourceFile="/Users/acvos/Documents/Projects/Bubbles/php/src/Acvos/Bubbles/DescriptorNotFoundException.php">DescriptorNotFoundException</Class>
+        <Class sourceFile="/Users/acvos/Documents/Projects/Bubbles/php/src/Acvos/Bubbles/ImmutableValueException.php">ImmutableValueException</Class>
+        <Class sourceFile="/Users/acvos/Documents/Projects/Bubbles/php/src/Acvos/Bubbles/NotSupportedException.php">NotSupportedException</Class>
+      </ConcreteClasses>
+      <AbstractClasses>
+        <Class sourceFile="/Users/acvos/Documents/Projects/Bubbles/php/src/Acvos/Bubbles/ContainerInterface.php">ContainerInterface</Class>
+        <Class sourceFile="/Users/acvos/Documents/Projects/Bubbles/php/src/Acvos/Bubbles/DescriptorFactoryInterface.php">DescriptorFactoryInterface</Class>
+        <Class sourceFile="/Users/acvos/Documents/Projects/Bubbles/php/src/Acvos/Bubbles/DescriptorInterface.php">DescriptorInterface</Class>
+      </AbstractClasses>
+      <DependsUpon>
+        <Package></Package>
+        <Package>Acvos\Bubbles\Descriptor</Package>
+      </DependsUpon>
+      <UsedBy>
+        <Package>Acvos\Bubbles\Descriptor</Package>
+      </UsedBy>
+    </Package>
+    <Package name="Acvos\Bubbles\Descriptor">
+      <Stats>
+        <TotalClasses>10</TotalClasses>
+        <ConcreteClasses>8</ConcreteClasses>
+        <AbstractClasses>2</AbstractClasses>
+        <Ca>1</Ca>
+        <Ce>2</Ce>
+        <A>0.2</A>
+        <I>0.66666666666667</I>
+        <D>0.13333333333333</D>
+      </Stats>
+      <ConcreteClasses>
+        <Class sourceFile="/Users/acvos/Documents/Projects/Bubbles/php/src/Acvos/Bubbles/Descriptor/Constant.php">Constant</Class>
+        <Class sourceFile="/Users/acvos/Documents/Projects/Bubbles/php/src/Acvos/Bubbles/Descriptor/FallbackStrategy.php">FallbackStrategy</Class>
+        <Class sourceFile="/Users/acvos/Documents/Projects/Bubbles/php/src/Acvos/Bubbles/Descriptor/GenericDescriptorFactory.php">GenericDescriptorFactory</Class>
+        <Class sourceFile="/Users/acvos/Documents/Projects/Bubbles/php/src/Acvos/Bubbles/Descriptor/KnownClassStrategy.php">KnownClassStrategy</Class>
+        <Class sourceFile="/Users/acvos/Documents/Projects/Bubbles/php/src/Acvos/Bubbles/Descriptor/PolymorphicDescriptorFactory.php">PolymorphicDescriptorFactory</Class>
+        <Class sourceFile="/Users/acvos/Documents/Projects/Bubbles/php/src/Acvos/Bubbles/Descriptor/Reference.php">Reference</Class>
+        <Class sourceFile="/Users/acvos/Documents/Projects/Bubbles/php/src/Acvos/Bubbles/Descriptor/RegexMatchStrategy.php">RegexMatchStrategy</Class>
+        <Class sourceFile="/Users/acvos/Documents/Projects/Bubbles/php/src/Acvos/Bubbles/Descriptor/ServiceDescriptor.php">ServiceDescriptor</Class>
+      </ConcreteClasses>
+      <AbstractClasses>
+        <Class sourceFile="/Users/acvos/Documents/Projects/Bubbles/php/src/Acvos/Bubbles/Descriptor/AbstractCreationStrategy.php">AbstractCreationStrategy</Class>
+        <Class sourceFile="/Users/acvos/Documents/Projects/Bubbles/php/src/Acvos/Bubbles/Descriptor/CreationStrategyInterface.php">CreationStrategyInterface</Class>
+      </AbstractClasses>
+      <DependsUpon>
+        <Package>Acvos\Bubbles</Package>
+        <Package>Acvos\Bubbles\Service</Package>
+      </DependsUpon>
+      <UsedBy>
+        <Package>Acvos\Bubbles</Package>
+      </UsedBy>
+    </Package>
+    <Package name="Acvos\Bubbles\Service">
+      <Stats>
+        <TotalClasses>2</TotalClasses>
+        <ConcreteClasses>1</ConcreteClasses>
+        <AbstractClasses>1</AbstractClasses>
+        <Ca>1</Ca>
+        <Ce>1</Ce>
+        <A>0.5</A>
+        <I>0.5</I>
+        <D>0</D>
+      </Stats>
+      <ConcreteClasses>
+        <Class sourceFile="/Users/acvos/Documents/Projects/Bubbles/php/src/Acvos/Bubbles/Service/SequentialBindingFactory.php">SequentialBindingFactory</Class>
+      </ConcreteClasses>
+      <AbstractClasses>
+        <Class sourceFile="/Users/acvos/Documents/Projects/Bubbles/php/src/Acvos/Bubbles/Service/ServiceFactoryInterface.php">ServiceFactoryInterface</Class>
+      </AbstractClasses>
+      <DependsUpon>
+        <Package></Package>
+      </DependsUpon>
+      <UsedBy>
+        <Package>Acvos\Bubbles\Descriptor</Package>
+      </UsedBy>
+    </Package>
+  </Packages>
+  <Cycles>
+    <Package Name="Acvos\Bubbles">
+      <Package>Acvos\Bubbles</Package>
+      <Package>Acvos\Bubbles\Descriptor</Package>
+      <Package>Acvos\Bubbles</Package>
+    </Package>
+    <Package Name="Acvos\Bubbles\Descriptor">
+      <Package>Acvos\Bubbles\Descriptor</Package>
+      <Package>Acvos\Bubbles</Package>
+      <Package>Acvos\Bubbles\Descriptor</Package>
+    </Package>
+  </Cycles>
+</PDepend>

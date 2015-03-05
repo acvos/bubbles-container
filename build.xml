@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="BubblesDI" default="ci">
+    <property file="build/default.properties" />
+
+    <if>
+        <isset property="build.env" />
+        <then>
+            <echo message="Overwriting default.properties with ${build.env}.properties" />
+            <property file="${project.basedir}/build/properties/${build.env}.properties" override="true" />
+        </then>
+    </if>
+
+    <!-- Preparation -->
+    <target name="prepare">
+        <echo msg="Making directory ./build" />
+        <mkdir dir="./build" />
+        <mkdir dir="./build/reports" />
+    </target>
+
+    <!-- PHP Lines of code -->
+    <target name="phploc">
+        <phploc reportType="csv" reportName="phploc-report"
+                reportDirectory="${location.reports}" countTests="true">
+            <fileset dir="${location.source}">
+                <include name="**/*.php" />
+            </fileset>
+        </phploc>
+    </target>
+
+    <!-- PHP Mess Detector -->
+    <target name="phpmd">
+        <phpmd rulesets="codesize,unusedcode">
+            <fileset dir="${location.source}">
+                <include name="**/*.php" />
+            </fileset>
+            <formatter type="xml" outfile="${location.reports}/pmd.xml" />
+        </phpmd>
+    </target>
+
+    <!-- PHP copy/paste analysis -->
+    <target name="phpcpd">
+        <phpcpd>
+            <fileset dir="${location.source}">
+                <include name="**/*.php" />
+            </fileset>
+            <formatter type="pmd" outfile="${location.reports}/pmd-cpd.xml" />
+        </phpcpd>
+    </target>
+
+    <!-- PHP dependency checker -->
+    <target name="pdepend">
+        <phpdepend>
+            <fileset dir="${location.source}">
+                <include name="**/*.php" />
+            </fileset>
+            <logger type="jdepend-xml" outfile="${location.reports}/jdepend.xml" />
+            <logger type="jdepend-chart" outfile="${location.reports}/dependencies.svg" />
+            <logger type="overview-pyramid" outfile="${location.reports}/overview-pyramid.svg" />
+        </phpdepend>
+    </target>
+
+    <!-- PHP CodeSniffer -->
+    <target name="phpcs">
+        <phpcodesniffer standard="PSR2" showSniffs="true" showWarnings="true" skipversioncheck="true">
+            <fileset dir="${location.source}">
+                <include name="**/*.php" />
+            </fileset>
+            <formatter type="checkstyle" outfile="${location.reports}/checkstyle.xml" />
+        </phpcodesniffer>
+    </target>
+
+    <!-- Static code analysis -->
+    <target name="static-analysis" depends="prepare">
+        <echo msg="Running static code analysis tools..." />
+
+        <phingcall target="phploc" />
+        <phingcall target="phpmd" />
+        <phingcall target="phpcpd" />
+        <phingcall target="pdepend" />
+        <phingcall target="phpcs" />
+    </target>
+
+    <!-- CI build -->
+    <target name="ci" depends="static-analysis">
+    </target>
+</project>

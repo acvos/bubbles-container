@@ -7,28 +7,31 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Acvos\Bubbles;
+namespace Acvos\Bubbles\Descriptor;
+
+use Acvos\Bubbles\DescriptorInterface;
+use Acvos\Bubbles\ContainerInterface;
 
 /**
- * Reference to a configuration object within evaluation context
+ * Primitive immutable configuration parameter
  *
  * @author Anton Chernikov <achernikov@acvos.com>
  */
-class Reference implements DescriptorInterface
+class Constant implements DescriptorInterface
 {
     /**
-     * Reference object name
-     * @var string
+     * Constant value
+     * @var mixed
      */
-    private $linkName;
+    private $value;
 
     /**
      * Constructor
-     * @param string $linkName Reference object name
+     * @param mixed $value Constant value
      */
-    public function __construct($linkName)
+    public function __construct($value)
     {
-        $this->linkName = (string) $linkName;
+        $this->value = $value;
     }
 
     /**
@@ -36,6 +39,6 @@ class Reference implements DescriptorInterface
      */
     public function resolve(ContainerInterface $context)
     {
-        return $context->get($this->linkName);
+        return $this->value;
     }
 }

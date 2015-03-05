@@ -9,7 +9,11 @@
  */
 namespace Acvos\Bubbles;
 
-use Acvos\Bubbles\Service\ServiceDescriptorBuilder;
+use Acvos\Bubbles\Descriptor\GenericDescriptorFactory;
+use Acvos\Bubbles\Descriptor\FallbackStrategy;
+use Acvos\Bubbles\Descriptor\KnownClassStrategy;
+use Acvos\Bubbles\Descriptor\RegexMatchStrategy;
+use Acvos\Bubbles\Descriptor\PolymorphicDescriptorFactory;
 
 /**
  * System facade
@@ -19,42 +23,37 @@ use Acvos\Bubbles\Service\ServiceDescriptorBuilder;
 class ContainerManager
 {
     /**
-     * Service descriptor builder
-     * @var ServiceDescriptorBuilder
+     * Service descriptor factory
+     * @var PolymorphicDescriptorFactory
      */
-    private $builder;
-
-    /**
-     * Constant descriptor factory
-     * @var DescriptorFactory
-     */
-    private $constantFactory;
+    private $factory;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->constantFactory = new DescriptorFactory('Acvos\Bubbles\Constant');
-        $serviceFactory = new DescriptorFactory('Acvos\Bubbles\Service\ServiceDescriptor');
-        $referenceFactory = new DescriptorFactory('Acvos\Bubbles\Reference');
+        $constantFactory   = new GenericDescriptorFactory('Acvos\Bubbles\Descriptor\Constant');
+        $defaultStrategy   = new FallbackStrategy($constantFactory);
 
-        $descriptorFactories = [
-            'constant'  => $this->constantFactory,
-            'service'   => $serviceFactory,
-            'reference' => $referenceFactory
-        ];
+        $serviceFactory    = new GenericDescriptorFactory('Acvos\Bubbles\Descriptor\ServiceDescriptor');
+        $serviceStrategy   = new KnownClassStrategy($serviceFactory);
 
-        $this->builder = new ServiceDescriptorBuilder($descriptorFactories, $serviceFactory);
+        $referenceFactory  = new GenericDescriptorFactory('Acvos\Bubbles\Descriptor\Reference');
+        $referenceStrategy = new RegexMatchStrategy($referenceFactory, '/^@(.*)$/');
+
+        $strategies = [$referenceStrategy, $serviceStrategy];
+
+        $this->factory = new PolymorphicDescriptorFactory($strategies, $defaultStrategy);
     }
 
     /**
-     * Returns descriptor builder
-     * @return ServiceDescriptorBuilder
+     * Returns descriptor factory
+     * @return PolymorphicDescriptorFactory
      */
-    public function getBuilder()
+    public function getFactory()
     {
-        return $this->builder;
+        return $this->factory;
     }
 
     /**
@@ -63,7 +62,7 @@ class ContainerManager
      */
     public function spawn()
     {
-        $container = new Container($this->constantFactory);
+        $container = new Container($this->factory);
 
         return $container;
     }

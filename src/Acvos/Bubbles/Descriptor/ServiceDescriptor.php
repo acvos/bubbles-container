@@ -7,11 +7,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Acvos\Bubbles\Service;
+namespace Acvos\Bubbles\Descriptor;
 
 use Acvos\Bubbles\DescriptorInterface;
 use Acvos\Bubbles\ContainerInterface;
 use Acvos\Bubbles\ImmutableValueException;
+use Acvos\Bubbles\Service\SequentialBindingFactory;
 
 /**
  * Service configuration
@@ -39,33 +40,13 @@ class ServiceDescriptor implements DescriptorInterface
     private $dependencies = [];
 
     /**
-     * Defines service factory based on given service class name
-     * @param  string $className Service class name
-     * @return $this
+     * Constructor
+     * @param string $className Service class name
      */
-    public function setClass($className)
+    public function __construct($className)
     {
         $factory = new SequentialBindingFactory((string) $className);
-        $this->setFactory($factory);
-
-        return $this;
-    }
-
-    /**
-     * Sets service factory
-     * @param  ServiceFactoryInterface $factory Service factory
-     * @return $this
-     * @throws ImmutableValueException If factory has been already set
-     */
-    public function setFactory(ServiceFactoryInterface $factory)
-    {
-        if ($this->factory !== null) {
-            throw new ImmutableValueException("Service factory has been already set");
-        }
-
         $this->factory = $factory;
-
-        return $this;
     }
 
     /**
@@ -94,11 +75,12 @@ class ServiceDescriptor implements DescriptorInterface
      */
     public function setDependency($name, DescriptorInterface $descriptor)
     {
-        if (isset($this->dependencies[(string) $name])) {
+        $name = (string) $name;
+        if (isset($this->dependencies[$name])) {
             throw new ImmutableValueException("Service dependencies are immutable");
         }
 
-        $this->dependencies[(string) $name] = $descriptor;
+        $this->dependencies[$name] = $descriptor;
 
         return $this;
     }

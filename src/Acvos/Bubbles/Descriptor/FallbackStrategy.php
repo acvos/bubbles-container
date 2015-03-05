@@ -7,15 +7,20 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Acvos\Bubbles\Service;
-
-use \RuntimeException;
+namespace Acvos\Bubbles\Descriptor;
 
 /**
- * Runtime error: given option is not supported
+ * Default descriptor creation strategy. Applies to anything
  *
  * @author Anton Chernikov <achernikov@acvos.com>
  */
-class OptionNotSupportedException extends RuntimeException
+class FallbackStrategy extends AbstractCreationStrategy
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function appliesTo($value)
+    {
+        return true;
+    }
 }

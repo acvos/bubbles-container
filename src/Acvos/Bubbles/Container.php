@@ -23,18 +23,24 @@ class Container implements ContainerInterface
     private $scope = [];
 
     /**
+     * Currently active descriptor
+     * @var DescriptorInterface
+     */
+    private $currentDescriptor;
+
+    /**
      * Default descriptor factory
      * @var DescriptorFactoryInterface
      */
-    private $defaultDescriptorFacotry;
+    private $descriptorFacotry;
 
     /**
      * Constructor
-     * @param DescriptorFactoryInterface $defaultDescriptorFacotry Default descriptor factory
+     * @param DescriptorFactoryInterface $descriptorFacotry Default descriptor factory
      */
-    public function __construct(DescriptorFactoryInterface $defaultDescriptorFacotry)
+    public function __construct(DescriptorFactoryInterface $descriptorFacotry)
     {
-        $this->defaultDescriptorFacotry = $defaultDescriptorFacotry;
+        $this->descriptorFacotry = $descriptorFacotry;
     }
 
     /**
@@ -50,12 +56,15 @@ class Container implements ContainerInterface
     /**
      * {@inheritdoc}
      */
-    public function register($name, DescriptorInterface $descriptor)
+    public function getDescriptor($name)
     {
-        $name = $this->normalizeName($name);
-        $this->scope[$name] = $descriptor;
+        if (!isset($this->scope[$name])) {
+            throw new DescriptorNotFoundException("Unknown name: $name");
+        }
 
-        return $this;
+        $descriptor = $this->scope[$name];
+
+        return $descriptor;
     }
 
     /**
@@ -63,26 +72,72 @@ class Container implements ContainerInterface
      */
     public function get($name)
     {
-        if (!isset($this->scope[$name])){
-            throw new DescriptorNotFoundException("Unknown name: $name");
-        }
+        $descriptor = $this->getDescriptor($name);
+        $value = $descriptor->resolve($this);
 
-        $descriptor = $this->scope[$name];
-
-        return $descriptor->resolve($this);
+        return $value;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function set($name, $value)
+    public function register($name, $descriptor)
     {
+        $name = $this->normalizeName($name);
         if (isset($this->scope[$name])){
             throw new ImmutableValueException("Container content is immutable: $name");
         }
 
-        $descriptor = $this->defaultDescriptorFacotry->create([$value]);
-        $this->register($name, $descriptor);
+        if (!$descriptor instanceof DescriptorInterface) {
+            $descriptor = $this->descriptorFacotry->create($descriptor);
+        }
+
+        $this->currentDescriptor = $descriptor;
+        $this->scope[$name] = $descriptor;
+
+        return $this;
+    }
+
+    /**
+     * Positions current descriptor cursor at given name
+     * @param  string $name Descriptor name
+     * @return $this
+     */
+    public function select($name)
+    {
+        $this->currentDescriptor = $this->getDescriptor($name);
+
+        return $this;
+    }
+
+    /**
+     * Returns current descriptor
+     * @return DescriptorInterface
+     */
+    public function getCurrentDescriptor()
+    {
+        return $this->currentDescriptor;
+    }
+
+    /**
+     * Adds dependency to the latest registered descriptor
+     * @param string $name  Dependency binding name
+     * @param mixed  $value Dependency value
+     * @return $this
+     * @throws NotSupportedException If current descriptor does not support dependencies
+     */
+    public function addDependency($name, $value)
+    {
+        if (!$value instanceof DescriptorInterface) {
+            $value = $this->descriptorFacotry->create($value);
+        }
+
+        if (!method_exists($this->currentDescriptor, 'setDependency')) {
+            $className = get_class($this->currentDescriptor);
+            throw new NotSupportedException("Cannot add dependency to an independent descriptor: $className");
+        }
+
+        $this->currentDescriptor->setDependency($name, $value);
 
         return $this;
     }

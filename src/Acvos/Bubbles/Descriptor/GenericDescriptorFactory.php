@@ -7,16 +7,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Acvos\Bubbles;
+namespace Acvos\Bubbles\Descriptor;
 
-use \ReflectionClass;
+use Acvos\Bubbles\DescriptorFactoryInterface;
 
 /**
  * Generic descriptor factory
  *
  * @author Anton Chernikov <achernikov@acvos.com>
  */
-class DescriptorFactory implements DescriptorFactoryInterface
+class GenericDescriptorFactory implements DescriptorFactoryInterface
 {
     /**
      * Descriptor class
@@ -36,10 +36,9 @@ class DescriptorFactory implements DescriptorFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function create(array $arguments = [])
+    public function create($value)
     {
-        $reflector = new ReflectionClass($this->class);
-        $product = $reflector->newInstanceArgs($arguments);
+        $product = new $this->class($value);
 
         return $product;
     }

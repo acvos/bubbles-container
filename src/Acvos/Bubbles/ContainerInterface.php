@@ -17,14 +17,6 @@ namespace Acvos\Bubbles;
 interface ContainerInterface
 {
     /**
-     * Registeres new descriptor with the container
-     * @param  string              $name       local name
-     * @param  DescriptorInterface $descriptor descriptor object
-     * @return $this
-     */
-    public function register($name, DescriptorInterface $descriptor);
-
-    /**
      * Finds and evaluates descriptor in this container
      * @param string $name local name
      * @return mixed
@@ -33,11 +25,18 @@ interface ContainerInterface
     public function get($name);
 
     /**
-     * Binds given name to a given value
-     * @param string $name  local name
-     * @param mixed  $value value to bind to the name
+     * Binds given name to a given descriptor.
+     * @param string $name       Local name
+     * @param mixed  $descriptor Value to bind to the name
      * @return $this
-     * @throws DescriptorNotFoundException If there is no descriptor bound to given name
+     * @throws ImmutableValueException If trying to bind the same name twice
      */
-    public function set($name, $value);
+    public function register($name, $descriptor);
+
+    /**
+     * Returns descriptor bound to given name
+     * @param  string $name Descriptor name
+     * @return DescriptorInterface
+     */
+    public function getDescriptor($name);
 }

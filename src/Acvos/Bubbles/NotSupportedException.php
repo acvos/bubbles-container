@@ -9,17 +9,13 @@
  */
 namespace Acvos\Bubbles;
 
+use \RuntimeException;
+
 /**
- * Descriptor factory
+ * Runtime error: feature/option is not supported
  *
  * @author Anton Chernikov <achernikov@acvos.com>
  */
-interface DescriptorFactoryInterface
+class NotSupportedException extends RuntimeException
 {
-    /**
-     * Produces new descriptor
-     * @param  mixed $value Value to be represented by the descriptor
-     * @return object
-     */
-    public function create($value);
 }

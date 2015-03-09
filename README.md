@@ -1,5 +1,4 @@
 # Bubbles DI
-==================
 
 Minimalistic, extensible, lazy dependency injection container
 

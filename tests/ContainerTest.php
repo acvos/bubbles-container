@@ -36,4 +36,25 @@ class ContainerTest extends PHPUnit_Framework_TestCase
         $count = count($this->testObject);
         $this->assertSame(0, $count);
     }
+
+    public function namesData()
+    {
+        return [
+            ['qwerty', 'qwerty'],
+            ['   qwerty        ', 'qwerty'],
+            ['QweRtY', 'qwerty'],
+            ['', ''],
+            [12345, '12345'],
+            [null, '']
+        ];
+    }
+
+    /**
+     * @dataProvider namesData
+     */
+    public function testNormalizeName($given, $expected)
+    {
+        $name = $this->testObject->normalizeName($given);
+        $this->assertSame($expected, $name);
+    }
 }

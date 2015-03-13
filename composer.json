@@ -19,7 +19,8 @@
         "phpmd/phpmd": "2.*",
         "sebastian/phpcpd": "1.4.*",
         "pdepend/pdepend": "2.*",
-        "squizlabs/php_codesniffer": "2.*"
+        "squizlabs/php_codesniffer": "2.*",
+        "phpunit/phpunit": "4.5.*"
     },
     "autoload": {
         "psr-0": { "Acvos\\": "src/" }

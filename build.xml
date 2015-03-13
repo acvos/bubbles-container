@@ -40,6 +40,13 @@
         </phpunit>
     </target>
 
+    <!-- PHP Linter -->
+    <target name="phplint">
+        <phplint haltonfailure="true" cachefile="${location.reports}/cachefile.txt">
+            <fileset refid="php-src"/>
+        </phplint>
+    </target>
+
     <!-- PHP Lines of code -->
     <target name="phploc">
         <phploc reportType="csv" reportName="phploc-report"
@@ -83,10 +90,10 @@
     </target>
 
     <!-- Static code analysis -->
-    <target name="static-analysis" depends="prepare">
+    <target name="analyze" depends="prepare">
         <echo msg="Running static code analysis tools..." />
 
-        <phingcall target="phpunit" />
+        <phingcall target="phplint" />
         <phingcall target="phploc" />
         <phingcall target="phpmd" />
         <phingcall target="phpcpd" />
@@ -94,7 +101,14 @@
         <phingcall target="phpcs" />
     </target>
 
+    <!-- Tests -->
+    <target name="test" depends="prepare">
+        <echo msg="Running tests..." />
+
+        <phingcall target="phpunit" />
+    </target>
+
     <!-- CI build -->
-    <target name="ci" depends="static-analysis">
+    <target name="ci" depends="analyze, test">
     </target>
 </project>

@@ -44,6 +44,15 @@ class Container implements ContainerInterface
     }
 
     /**
+     * Returns descriptor factory
+     * @return DescriptorFactoryInterface
+     */
+    public function getDescriptorFactory()
+    {
+        return $this->descriptorFacotry;
+    }
+
+    /**
      * Normalizes name string
      * @param  string $name Name
      * @return string
@@ -51,6 +60,14 @@ class Container implements ContainerInterface
     public function normalizeName($name)
     {
         return strtolower(trim($name));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function count()
+    {
+        return count($this->scope);
     }
 
     /**

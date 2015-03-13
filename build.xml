@@ -13,33 +13,33 @@
 
     <!-- Preparation -->
     <target name="prepare">
-        <echo msg="Making directory ./build" />
-        <mkdir dir="./build" />
-        <mkdir dir="./build/reports" />
+        <echo msg="Making build directories" />
+        <mkdir dir="${location.reports}" />
+        <mkdir dir="${location.reports}/tests"/>
+        <mkdir dir="${location.reports}/coverage"/>
     </target>
 
     <!-- Unit-tests -->
     <target name="phpunit">
-        <delete dir="${location.reports}"/>
-        <mkdir dir="${location.reports}/tests"/>
-        <mkdir dir="${location.reports}/coverage"/>
         <coverage-setup database="${location.reports}/coverage.db">
             <fileset dir="${location.source}">
                 <include name="**/*.php"/>
             </fileset>
         </coverage-setup>
-        <phpunit codecoverage="true">
+        <phpunit codecoverage="true" pharlocation="${location.phpunit}" bootstrap="vendor/autoload.php" >
             <formatter type="xml" todir="${location.reports}"/>
             <batchtest>
-            <fileset dir="${location.tests}">
-                <include name="**/*.php" />
-            </fileset>
+                <fileset dir="${location.tests}">
+                    <include name="*.php" />
+                    <include name="**/*.php" />
+                </fileset>
             </batchtest>
         </phpunit>
-        <phpunitreport infile="${location.reports}/testsuites.xml" format="frames" todir="${location.reports}/tests"/>
+<!--         <phpunitreport infile="${location.reports}/testsuites.xml" format="frames" todir="${location.reports}/tests"/>
         <coverage-report outfile="${location.reports}/coverage.xml">
             <report todir="${location.reports}/coverage" title="Bubbles"/>
         </coverage-report>
+ -->
     </target>
 
     <!-- PHP Lines of code -->

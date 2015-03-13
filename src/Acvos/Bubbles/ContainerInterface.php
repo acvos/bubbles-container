@@ -9,12 +9,14 @@
  */
 namespace Acvos\Bubbles;
 
+use \Countable;
+
 /**
  * DI container
  *
  * @author Anton Chernikov <achernikov@acvos.com>
  */
-interface ContainerInterface
+interface ContainerInterface extends Countable
 {
     /**
      * Finds and evaluates descriptor in this container

@@ -3,6 +3,13 @@
 <project name="BubblesDI" default="ci">
     <property file="build/default.properties" />
 
+    <fileset dir="${location.source}" id="php-src">
+        <include name="*.php"/>
+        <include name="**/*.php"/>
+        <exclude name="*Test.php"/>
+        <exclude name="**/*Test.php"/>
+    </fileset>
+
     <if>
         <isset property="build.env" />
         <then>
@@ -15,49 +22,36 @@
     <target name="prepare">
         <echo msg="Making build directories" />
         <mkdir dir="${location.reports}" />
-        <mkdir dir="${location.reports}/tests"/>
-        <mkdir dir="${location.reports}/coverage"/>
     </target>
 
     <!-- Unit-tests -->
     <target name="phpunit">
         <coverage-setup database="${location.reports}/coverage.db">
-            <fileset dir="${location.source}">
-                <include name="**/*.php"/>
-            </fileset>
+            <fileset refid="php-src"/>
         </coverage-setup>
-        <phpunit codecoverage="true" pharlocation="${location.phpunit}" bootstrap="vendor/autoload.php" >
-            <formatter type="xml" todir="${location.reports}"/>
+
+        <phpunit codecoverage="true" printsummary="true">
+            <formatter todir="${location.reports}" type="xml"/>
             <batchtest>
-                <fileset dir="${location.tests}">
-                    <include name="*.php" />
-                    <include name="**/*.php" />
+                <fileset dir="tests">
+                    <include name="**/*Test.php"/>
                 </fileset>
             </batchtest>
         </phpunit>
-<!--         <phpunitreport infile="${location.reports}/testsuites.xml" format="frames" todir="${location.reports}/tests"/>
-        <coverage-report outfile="${location.reports}/coverage.xml">
-            <report todir="${location.reports}/coverage" title="Bubbles"/>
-        </coverage-report>
- -->
     </target>
 
     <!-- PHP Lines of code -->
     <target name="phploc">
         <phploc reportType="csv" reportName="phploc-report"
                 reportDirectory="${location.reports}" countTests="true">
-            <fileset dir="${location.source}">
-                <include name="**/*.php" />
-            </fileset>
+            <fileset refid="php-src"/>
         </phploc>
     </target>
 
     <!-- PHP Mess Detector -->
     <target name="phpmd">
         <phpmd rulesets="codesize,unusedcode">
-            <fileset dir="${location.source}">
-                <include name="**/*.php" />
-            </fileset>
+            <fileset refid="php-src"/>
             <formatter type="xml" outfile="${location.reports}/pmd.xml" />
         </phpmd>
     </target>
@@ -65,9 +59,7 @@
     <!-- PHP copy/paste analysis -->
     <target name="phpcpd">
         <phpcpd>
-            <fileset dir="${location.source}">
-                <include name="**/*.php" />
-            </fileset>
+            <fileset refid="php-src"/>
             <formatter type="pmd" outfile="${location.reports}/pmd-cpd.xml" />
         </phpcpd>
     </target>
@@ -75,9 +67,7 @@
     <!-- PHP dependency checker -->
     <target name="pdepend">
         <phpdepend>
-            <fileset dir="${location.source}">
-                <include name="**/*.php" />
-            </fileset>
+            <fileset refid="php-src"/>
             <logger type="jdepend-xml" outfile="${location.reports}/jdepend.xml" />
             <logger type="jdepend-chart" outfile="${location.reports}/dependencies.svg" />
             <logger type="overview-pyramid" outfile="${location.reports}/overview-pyramid.svg" />
@@ -87,9 +77,7 @@
     <!-- PHP CodeSniffer -->
     <target name="phpcs">
         <phpcodesniffer standard="PSR2" showSniffs="true" showWarnings="true" skipversioncheck="true">
-            <fileset dir="${location.source}">
-                <include name="**/*.php" />
-            </fileset>
+            <fileset refid="php-src"/>
             <formatter type="checkstyle" outfile="${location.reports}/checkstyle.xml" />
         </phpcodesniffer>
     </target>

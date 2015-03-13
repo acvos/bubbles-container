@@ -1,6 +1,7 @@
 # Bubbles DI
 
 Minimalistic, extensible, lazy dependency injection container
+[![Build Status](https://travis-ci.org/acvos/bubbles-container.svg?branch=master)](https://travis-ci.org/acvos/bubbles-container)
 
 ### What?
 Bubbles is a glue that allows you to present your plain old PHP classes as injectable services, so that you can configure your application dependencies and keep your code modular and loosely coupled.

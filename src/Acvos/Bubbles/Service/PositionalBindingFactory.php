@@ -16,7 +16,7 @@ use \ReflectionClass;
  *
  * @author Anton Chernikov <achernikov@acvos.com>
  */
-class SequentialBindingFactory implements ServiceFactoryInterface
+class PositionalBindingFactory implements ServiceFactoryInterface
 {
     /**
      * Fully qualified class name

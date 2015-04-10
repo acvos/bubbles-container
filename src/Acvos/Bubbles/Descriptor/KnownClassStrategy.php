@@ -10,6 +10,7 @@
 namespace Acvos\Bubbles\Descriptor;
 
 use Acvos\Bubbles\DescriptorFactoryInterface;
+use Exception;
 
 /**
  * Strategy adapter for object descriptor factory.
@@ -24,6 +25,10 @@ class KnownClassStrategy extends AbstractCreationStrategy
      */
     public function appliesTo($value)
     {
+        if (!is_string($value)) {
+            return false;
+        }
+
         return class_exists($value);
     }
 }

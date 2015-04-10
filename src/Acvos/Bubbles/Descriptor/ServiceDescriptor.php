@@ -12,7 +12,7 @@ namespace Acvos\Bubbles\Descriptor;
 use Acvos\Bubbles\DescriptorInterface;
 use Acvos\Bubbles\ContainerInterface;
 use Acvos\Bubbles\ImmutableValueException;
-use Acvos\Bubbles\Service\SequentialBindingFactory;
+use Acvos\Bubbles\Service\PositionalBindingFactory;
 
 /**
  * Service configuration
@@ -45,7 +45,7 @@ class ServiceDescriptor implements DescriptorInterface
      */
     public function __construct($className)
     {
-        $factory = new SequentialBindingFactory((string) $className);
+        $factory = new PositionalBindingFactory((string) $className);
         $this->factory = $factory;
     }
 

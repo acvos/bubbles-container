@@ -7,6 +7,11 @@ Minimalistic, extensible, lazy dependency injection container.
 It's always good to follow best practices even when you don't use a full-stack framework. If you are writing a small, focused back-end service or script, but still want the full power of DI, Bubbles would help turning your plain old PHP classes into injectable services.
 
 ### How?
+Installation
+```bash
+composer require acvos/bubbles
+```
+Usage
 ```php
 // Instantiating Bubbles facade
 $bubbles = new Acvos\Bubbles\ContainerManager();

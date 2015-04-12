@@ -12,8 +12,10 @@ namespace Acvos\Bubbles\Descriptor;
 use PHPUnit_Framework_TestCase;
 use StdClass;
 
-class FallbackStrategyTest extends PHPUnit_Framework_TestCase
+class RegexMatchStrategyTest extends PHPUnit_Framework_TestCase
 {
+    const TEST_PATTERN = '/^#(.*)#$/';
+
     private $mockFactory;
     private $testObject;
 
@@ -21,7 +23,7 @@ class FallbackStrategyTest extends PHPUnit_Framework_TestCase
     {
         $this->generateMockFactory();
 
-        $this->testObject = new FallbackStrategy($this->mockFactory);
+        $this->testObject = new RegexMatchStrategy($this->mockFactory, self::TEST_PATTERN);
     }
 
     public function generateMockFactory()
@@ -35,6 +37,9 @@ class FallbackStrategyTest extends PHPUnit_Framework_TestCase
     {
         $factory = $this->testObject->getFactory();
         $this->assertSame($this->mockFactory, $factory);
+
+        $pattern = $this->testObject->getPattern();
+        $this->assertSame(self::TEST_PATTERN, $pattern);
     }
 
     public function testCreate()
@@ -48,34 +53,45 @@ class FallbackStrategyTest extends PHPUnit_Framework_TestCase
             ->with($testValue)
             ->will($this->returnValue($testResult));
 
-        $result = $this->testObject->create($testValue);
+        $result = $this->testObject->create('#' . $testValue . '#');
         $this->assertSame($testResult, $result);
     }
 
     public function allValues()
     {
         return [
-            [null, true],
-            [0, true],
-            [100500, true],
-            [91.6, true],
-            ['', true],
-            ['some string', true],
-            ['100500', true],
-            [true, true],
-            [false, true],
-            [[], true],
-            [['a', 'b'], true],
-            [new StdClass(), true],
-            ['\StdClass', true],
-            ['\Countable', true]
+            [null, false, ''],
+            [0, false, ''],
+            [100500, false, ''],
+            [91.6, false, ''],
+            ['', false, ''],
+            ['some string', false, ''],
+            ['100500', false, ''],
+            ['#this will do#', true, 'this will do'],
+            ['#200300#', true, '200300'],
+            [true, false, ''],
+            [false, false, ''],
+            [[], false, ''],
+            [['a', 'b'], false, ''],
+            [new StdClass(), false, ''],
+            ['\StdClass', false, ''],
+            ['\Countable', false, '']
         ];
     }
 
     /**
      * @dataProvider allValues
      */
-    public function testAppliesTo($provided, $expected)
+    public function testExtractValue($provided, $ignored, $expected)
+    {
+        $result = $this->testObject->extractValue($provided);
+        $this->assertSame($expected, $result);
+    }
+
+    /**
+     * @dataProvider allValues
+     */
+    public function testAppliesTo($provided, $expected, $ignored)
     {
         $result = $this->testObject->appliesTo($provided);
         $this->assertSame($expected, $result);

@@ -46,13 +46,33 @@ class RegexMatchStrategy extends AbstractCreationStrategy
     }
 
     /**
+     * Extracts value from given string based on the pattern
+     * @param string $rawData string to be matched against the pattern
+     * @return string
+     */
+    public function extractValue($rawData)
+    {
+        if (is_string($rawData)) {
+            preg_match($this->pattern, (string) $rawData, $matches);
+
+            if (count($matches) > 1) {
+                return $matches[1];
+            }
+        }
+
+        return '';
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function appliesTo($value)
     {
-        $test = preg_match($this->pattern, (string) $value);
+        if (!is_string($value)) {
+            return false;
+        }
 
-        return $test;
+        return (bool) preg_match($this->pattern, (string) $value);
     }
 
     /**
@@ -60,8 +80,8 @@ class RegexMatchStrategy extends AbstractCreationStrategy
      */
     public function create($value)
     {
-        preg_match($this->pattern, (string) $value, $matches);
-        $descriptor = $this->getFactory()->create($matches[1]);
+        $value = $this->extractValue($value);
+        $descriptor = parent::create($value);
 
         return $descriptor;
     }

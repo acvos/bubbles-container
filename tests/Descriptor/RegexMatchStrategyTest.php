@@ -14,7 +14,7 @@ use StdClass;
 
 class RegexMatchStrategyTest extends PHPUnit_Framework_TestCase
 {
-    const TEST_PATTERN = '/^#(.*)#$/';
+    const TEST_PATTERN = '/#(.*)#/';
 
     private $mockFactory;
     private $testObject;
@@ -57,41 +57,69 @@ class RegexMatchStrategyTest extends PHPUnit_Framework_TestCase
         $this->assertSame($testResult, $result);
     }
 
-    public function allValues()
-    {
+    public function matchingValues() {
         return [
-            [null, false, ''],
-            [0, false, ''],
-            [100500, false, ''],
-            [91.6, false, ''],
-            ['', false, ''],
-            ['some string', false, ''],
-            ['100500', false, ''],
-            ['#this will do#', true, 'this will do'],
-            ['#200300#', true, '200300'],
-            [true, false, ''],
-            [false, false, ''],
-            [[], false, ''],
-            [['a', 'b'], false, ''],
-            [new StdClass(), false, ''],
-            ['\StdClass', false, ''],
-            ['\Countable', false, '']
+            ['#some string value#', 'some string value'],
+            ['#some string# #and again#', 'some string# #and again'],
+            ['#200300#', '200300']
         ];
     }
 
     /**
-     * @dataProvider allValues
+     * @dataProvider matchingValues
      */
-    public function testExtractValue($provided, $ignored, $expected)
+    public function testExtractValue($provided, $expected)
     {
         $result = $this->testObject->extractValue($provided);
         $this->assertSame($expected, $result);
     }
 
+    public function badValues() {
+        return [
+            [null],
+            [0],
+            [100500],
+            [91.6],
+            [''],
+            ['some string'],
+            ['100500'],
+            [true],
+            [false],
+            [[]],
+            [['a', 'b']],
+            [new StdClass()],
+            ['\StdClass'],
+            ['\Countable']
+        ];
+    }
+
+    /**
+     * @dataProvider badValues
+     * @expectedException Acvos\Bubbles\Descriptor\BadArgumentException
+     */
+    public function testExtractValueWithBadArguments($provided)
+    {
+        $result = $this->testObject->extractValue($provided);
+    }
+
+    public function allValues()
+    {
+        $values = array_merge(
+            array_map(function ($value) {
+                return [$value[0], false];
+            }, $this->badValues()),
+            array_map(function ($value) {
+                return [$value[0], true];
+            }, $this->matchingValues())
+        );
+
+        return $values;
+    }
+
     /**
      * @dataProvider allValues
      */
-    public function testAppliesTo($provided, $expected, $ignored)
+    public function testAppliesTo($provided, $expected)
     {
         $result = $this->testObject->appliesTo($provided);
         $this->assertSame($expected, $result);

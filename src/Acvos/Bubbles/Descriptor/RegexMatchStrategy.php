@@ -49,18 +49,21 @@ class RegexMatchStrategy extends AbstractCreationStrategy
      * Extracts value from given string based on the pattern
      * @param string $rawData string to be matched against the pattern
      * @return string
+     * @throws  BadArgumentException If [this condition is met]
      */
     public function extractValue($rawData)
     {
-        if (is_string($rawData)) {
-            preg_match($this->pattern, (string) $rawData, $matches);
-
-            if (count($matches) > 1) {
-                return $matches[1];
-            }
+        if (!is_string($rawData)) {
+            throw new BadArgumentException('Regex can only be applied to strings');
         }
 
-        return '';
+        $pattern = $this->getPattern();
+        $result = preg_match($pattern, $rawData, $matches);
+        if (!$result) {
+            throw new BadArgumentException("No matches found for $pattern in $rawData");
+        }
+
+        return $matches[1];
     }
 
     /**
@@ -72,7 +75,9 @@ class RegexMatchStrategy extends AbstractCreationStrategy
             return false;
         }
 
-        return (bool) preg_match($this->pattern, (string) $value);
+        $result = (bool) preg_match($this->getPattern(), $value);
+
+        return $result;
     }
 
     /**

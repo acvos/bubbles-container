@@ -24,7 +24,7 @@ $container
     ->register('some_parameter', 200)
     ->register('test.service', 'Acvos\Bubbles\Example\TestService')
         ->addDependency('foo', 100)
-        ->addDependency('bar', 'some_parameter')
+        ->addDependency('bar', '@some_parameter')
     ->register('test.another.service', 'Acvos\Bubbles\Example\TestService')
         ->addDependency('something', '@test.service')
         ->addDependency('something_more', '@some_parameter');

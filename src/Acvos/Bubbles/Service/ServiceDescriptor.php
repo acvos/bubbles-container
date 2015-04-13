@@ -7,12 +7,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Acvos\Bubbles\Descriptor;
+namespace Acvos\Bubbles\Service;
 
 use Acvos\Bubbles\DescriptorInterface;
 use Acvos\Bubbles\ContainerInterface;
 use Acvos\Bubbles\ImmutableValueException;
-use Acvos\Bubbles\Service\PositionalBindingFactory;
 
 /**
  * Service configuration
@@ -29,7 +28,7 @@ class ServiceDescriptor implements DescriptorInterface
 
     /**
      * Service factory (immutable)
-     * @var FactoryInterface
+     * @var ServiceFactoryInterface
      */
     private $factory;
 
@@ -41,17 +40,16 @@ class ServiceDescriptor implements DescriptorInterface
 
     /**
      * Constructor
-     * @param string $className Service class name
+     * @param string $factory Service factory
      */
-    public function __construct($className)
+    public function __construct(ServiceFactoryInterface $factory)
     {
-        $factory = new PositionalBindingFactory((string) $className);
         $this->factory = $factory;
     }
 
     /**
      * Returns service factory
-     * @return FactoryInterface
+     * @return ServiceFactoryInterface
      */
     public function getFactory()
     {

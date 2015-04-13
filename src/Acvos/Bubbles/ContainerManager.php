@@ -9,6 +9,7 @@
  */
 namespace Acvos\Bubbles;
 
+use Acvos\Bubbles\Service\ServiceDescriptorFactory;
 use Acvos\Bubbles\Descriptor\GenericDescriptorFactory;
 use Acvos\Bubbles\Descriptor\FallbackStrategy;
 use Acvos\Bubbles\Descriptor\KnownClassStrategy;
@@ -36,7 +37,7 @@ class ContainerManager
         $constantFactory   = new GenericDescriptorFactory('Acvos\Bubbles\Descriptor\Constant');
         $defaultStrategy   = new FallbackStrategy($constantFactory);
 
-        $serviceFactory    = new GenericDescriptorFactory('Acvos\Bubbles\Descriptor\ServiceDescriptor');
+        $serviceFactory    = new ServiceDescriptorFactory();
         $serviceStrategy   = new KnownClassStrategy($serviceFactory);
 
         $referenceFactory  = new GenericDescriptorFactory('Acvos\Bubbles\Descriptor\Reference');

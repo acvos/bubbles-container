@@ -10,7 +10,7 @@ $container
     ->register('zzz', 200)
     ->register('test.service', 'Acvos\Bubbles\Example\TestService')
         ->addDependency('foo', 100)
-        ->addDependency('bar', 'zzz')
+        ->addDependency('bar', '@zzz')
     ->register('test.another.service', 'Acvos\Bubbles\Example\TestService')
         ->addDependency('something', '@test.service')
         ->addDependency('something_more', '@zzz');

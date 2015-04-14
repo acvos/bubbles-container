@@ -15,10 +15,10 @@ $container
         ->addDependency('something', '@test.service')
         ->addDependency('something_more', '@zzz');
 
+var_dump($container);
+
 $service = $container->get('test.another.service');
 var_dump($service);
 
 $service = $container->get('test.service');
 var_dump($service);
-
-var_dump($container);

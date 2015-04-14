@@ -50,6 +50,27 @@ class PositionalBindingFactory implements ServiceFactoryInterface
     }
 
     /**
+     * Returns number of parameters expected by the constructor method
+     * of a given reflection class object in following format:
+     *     [minCount, maxCount]
+     * @param ReflectionClass $reflector Reflector object
+     * @return array
+     */
+    public function countConstructorParameters(ReflectionClass $reflector)
+    {
+        if (is_callable($this->getClassName(), self::CONSTRUCTOR_METHOD_NAME)) {
+            $constructor = $reflector->getMethod(self::CONSTRUCTOR_METHOD_NAME);
+            $maxCount = $constructor->getNumberOfParameters();
+            $requiredCount = $constructor->getNumberOfRequiredParameters();
+        } else {
+            $maxCount = 0;
+            $requiredCount = 0;
+        }
+
+        return [$requiredCount, $maxCount];
+    }
+
+    /**
      * {@inheritdoc}
      * @throws BadConfigurationException if the number of given parameters
      * does not match the number of parameters expected by the class constructor
@@ -59,18 +80,14 @@ class PositionalBindingFactory implements ServiceFactoryInterface
         $className = $this->getClassName();
         $reflector = new ReflectionClass($className);
 
-        if ($reflector->hasMethod(self::CONSTRUCTOR_METHOD_NAME)) {
-            $constructParameterCount = $reflector
-                ->getMethod(self::CONSTRUCTOR_METHOD_NAME)
-                ->getNumberOfParameters();
-        } else {
-            $constructParameterCount = 0;
-        }
+        list($requiredParameterCount, $maxParameterCount) = $this
+            ->countConstructorParameters($reflector);
 
         $givenParametersCount = count($parameters);
-        if ($constructParameterCount !== $givenParametersCount) {
-            throw new BadConfigurationException("$className expects $constructParameterCount constructor parameters, $givenParametersCount given");
-        } elseif ($constructParameterCount > 0) {
+        if ($givenParametersCount < $requiredParameterCount
+         || $givenParametersCount > $maxParameterCount) {
+            throw new BadConfigurationException("$className expects $requiredParameterCount to $maxParameterCount constructor parameters, $givenParametersCount given");
+        } elseif ($givenParametersCount > 0) {
             $service = $reflector->newInstanceArgs($parameters);
         } else {
             $service = new $className();

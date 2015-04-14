@@ -58,13 +58,16 @@ class PositionalBindingFactory implements ServiceFactoryInterface
      */
     public function countConstructorParameters(ReflectionClass $reflector)
     {
-        if (is_callable($this->getClassName(), self::CONSTRUCTOR_METHOD_NAME)) {
+        $maxCount = 0;
+        $requiredCount = 0;
+
+        if ($reflector->hasMethod(self::CONSTRUCTOR_METHOD_NAME)) {
             $constructor = $reflector->getMethod(self::CONSTRUCTOR_METHOD_NAME);
-            $maxCount = $constructor->getNumberOfParameters();
-            $requiredCount = $constructor->getNumberOfRequiredParameters();
-        } else {
-            $maxCount = 0;
-            $requiredCount = 0;
+
+            if ($constructor->isPublic()) {
+                $maxCount = $constructor->getNumberOfParameters();
+                $requiredCount = $constructor->getNumberOfRequiredParameters();
+            }
         }
 
         return [$requiredCount, $maxCount];

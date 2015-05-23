@@ -33,15 +33,6 @@ class RegexMatchStrategyTest extends PHPUnit_Framework_TestCase
             ->getMock();
     }
 
-    public function testConstructor()
-    {
-        $factory = $this->testObject->getFactory();
-        $this->assertSame($this->mockFactory, $factory);
-
-        $pattern = $this->testObject->getPattern();
-        $this->assertSame(self::TEST_PATTERN, $pattern);
-    }
-
     public function testCreate()
     {
         $testValue = 'blah';

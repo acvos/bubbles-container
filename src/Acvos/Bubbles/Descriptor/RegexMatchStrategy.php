@@ -37,15 +37,6 @@ class RegexMatchStrategy extends AbstractCreationStrategy
     }
 
     /**
-     * Returns value pattern
-     * @return string
-     */
-    public function getPattern()
-    {
-        return $this->pattern;
-    }
-
-    /**
      * Extracts value from given string based on the pattern
      * @param string $rawData string to be matched against the pattern
      * @return string
@@ -57,7 +48,7 @@ class RegexMatchStrategy extends AbstractCreationStrategy
             throw new BadArgumentException('Regex can only be applied to strings');
         }
 
-        $pattern = $this->getPattern();
+        $pattern = $this->pattern;
         $result = preg_match($pattern, $rawData, $matches);
         if (!$result) {
             throw new BadArgumentException("No matches found for $pattern in $rawData");
@@ -75,7 +66,7 @@ class RegexMatchStrategy extends AbstractCreationStrategy
             return false;
         }
 
-        $result = (bool) preg_match($this->getPattern(), $value);
+        $result = (bool) preg_match($this->pattern, $value);
 
         return $result;
     }

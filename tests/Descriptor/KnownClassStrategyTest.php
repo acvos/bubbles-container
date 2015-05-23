@@ -31,12 +31,6 @@ class KnownClassStrategyTest extends PHPUnit_Framework_TestCase
             ->getMock();
     }
 
-    public function testConstructor()
-    {
-        $factory = $this->testObject->getFactory();
-        $this->assertSame($this->mockFactory, $factory);
-    }
-
     public function testCreate()
     {
         $testValue = 'blah';

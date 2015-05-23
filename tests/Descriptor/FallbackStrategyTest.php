@@ -26,12 +26,6 @@ class FallbackStrategyTest extends PHPUnit_Framework_TestCase
         $this->testObject = new FallbackStrategy($this->mockFactory);
     }
 
-    public function testConstructor()
-    {
-        $factory = $this->testObject->getFactory();
-        $this->assertSame($this->mockFactory, $factory);
-    }
-
     public function testCreate()
     {
         $testValue = 'blah';

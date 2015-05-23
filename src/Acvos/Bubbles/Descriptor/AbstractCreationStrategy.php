@@ -34,15 +34,6 @@ abstract class AbstractCreationStrategy implements CreationStrategyInterface
     }
 
     /**
-     * Returns factory
-     * @return DescriptorFactoryInterface
-     */
-    public function getFactory()
-    {
-        return $this->factory;
-    }
-
-    /**
      * {@inheritdoc}
      */
     abstract public function appliesTo($value);
@@ -52,6 +43,6 @@ abstract class AbstractCreationStrategy implements CreationStrategyInterface
      */
     public function create($value)
     {
-        return $this->getFactory()->create($value);
+        return $this->factory->create($value);
     }
 }

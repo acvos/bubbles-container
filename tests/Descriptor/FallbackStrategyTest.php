@@ -19,16 +19,11 @@ class FallbackStrategyTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->generateMockFactory();
-
-        $this->testObject = new FallbackStrategy($this->mockFactory);
-    }
-
-    public function generateMockFactory()
-    {
         $this->mockFactory = $this
             ->getMockBuilder('Acvos\Bubbles\DescriptorFactoryInterface')
             ->getMock();
+
+        $this->testObject = new FallbackStrategy($this->mockFactory);
     }
 
     public function testConstructor()

@@ -149,12 +149,12 @@ class Container implements ContainerInterface
             $value = $this->descriptorFacotry->create($value);
         }
 
-        if (!method_exists($this->currentDescriptor, 'setDependency')) {
+        if (!$this->currentDescriptor instanceof DependentInterface) {
             $className = get_class($this->currentDescriptor);
             throw new NotSupportedException("Cannot add dependency to an independent descriptor: $className");
         }
 
-        $this->currentDescriptor->setDependency($name, $value);
+        $this->currentDescriptor->addDependency($name, $value);
 
         return $this;
     }

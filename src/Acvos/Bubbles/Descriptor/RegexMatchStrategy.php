@@ -49,7 +49,7 @@ class RegexMatchStrategy extends AbstractCreationStrategy
      * Extracts value from given string based on the pattern
      * @param string $rawData string to be matched against the pattern
      * @return string
-     * @throws  BadArgumentException If [this condition is met]
+     * @throws BadArgumentException If supplied value is not string or no matches are found for the pattern
      */
     public function extractValue($rawData)
     {

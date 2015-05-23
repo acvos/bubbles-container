@@ -41,22 +41,13 @@ class PositionalBindingFactory implements ServiceFactoryInterface
     }
 
     /**
-     * Returns service class name
-     * @return string
-     */
-    public function getClassName()
-    {
-        return $this->className;
-    }
-
-    /**
      * Returns number of parameters expected by the constructor method
      * of a given reflection class object in following format:
      *     [minCount, maxCount]
      * @param ReflectionClass $reflector Reflector object
      * @return array
      */
-    public function countConstructorParameters(ReflectionClass $reflector)
+    protected function countConstructorParameters(ReflectionClass $reflector)
     {
         $maxCount = 0;
         $requiredCount = 0;
@@ -80,7 +71,7 @@ class PositionalBindingFactory implements ServiceFactoryInterface
      */
     public function create(array $parameters)
     {
-        $className = $this->getClassName();
+        $className = $this->className;
         $reflector = new ReflectionClass($className);
 
         list($requiredParameterCount, $maxParameterCount) = $this

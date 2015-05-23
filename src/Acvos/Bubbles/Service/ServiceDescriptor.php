@@ -18,7 +18,7 @@ use Acvos\Bubbles\ImmutableValueException;
  *
  * @author Anton Chernikov <achernikov@acvos.com>
  */
-class ServiceDescriptor implements DescriptorInterface
+class ServiceDescriptor implements ServiceDescriptorInterface
 {
     /**
      * Service instance
@@ -48,30 +48,9 @@ class ServiceDescriptor implements DescriptorInterface
     }
 
     /**
-     * Returns service factory
-     * @return ServiceFactoryInterface
+     * {@inheritdoc}
      */
-    public function getFactory()
-    {
-        return $this->factory;
-    }
-
-    /**
-     * Returns service dependencies
-     * @return array
-     */
-    public function getDependencies()
-    {
-        return $this->dependencies;
-    }
-
-    /**
-     * Adds service dependency
-     * @param string              $name       Dependency name
-     * @param DescriptorInterface $descriptor Dependency descriptor object
-     * @return $this
-     */
-    public function setDependency($name, DescriptorInterface $descriptor)
+    public function addDependency($name, DescriptorInterface $descriptor)
     {
         $name = (string) $name;
         if (isset($this->dependencies[$name])) {
@@ -84,8 +63,7 @@ class ServiceDescriptor implements DescriptorInterface
     }
 
     /**
-     * Evaluates dependency descriptors in given context
-     * @return array
+     * {@inheritdoc}
      */
     public function resolveDependencies(ContainerInterface $context)
     {

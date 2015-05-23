@@ -14,12 +14,6 @@ use StdClass;
 
 class PositionalBindingFactoryTest extends PHPUnit_Framework_TestCase
 {
-    public function testConstructor()
-    {
-        $testObject = new PositionalBindingFactory('StdClass');
-        $this->assertSame('StdClass', $testObject->getClassName());
-    }
-
     /**
      * @expectedException Acvos\Bubbles\Service\BadConfigurationException
      */

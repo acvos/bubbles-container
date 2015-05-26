@@ -143,7 +143,7 @@ class Container implements ContainerInterface
      * @return $this
      * @throws NotSupportedException If current descriptor does not support dependencies
      */
-    public function addDependency($name, $value)
+    public function addDependency($value, $name = '')
     {
         if (!$value instanceof DescriptorInterface) {
             $value = $this->descriptorFacotry->create($value);
@@ -154,7 +154,7 @@ class Container implements ContainerInterface
             throw new NotSupportedException("Cannot add dependency to an independent descriptor: $className");
         }
 
-        $this->currentDescriptor->addDependency($name, $value);
+        $this->currentDescriptor->addDependency($value, $name);
 
         return $this;
     }

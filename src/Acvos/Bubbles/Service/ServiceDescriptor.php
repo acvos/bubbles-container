@@ -50,14 +50,18 @@ class ServiceDescriptor implements ServiceDescriptorInterface
     /**
      * {@inheritdoc}
      */
-    public function addDependency($name, DescriptorInterface $descriptor)
+    public function addDependency(DescriptorInterface $dependency, $name = '')
     {
-        $name = (string) $name;
-        if (isset($this->dependencies[$name])) {
-            throw new ImmutableValueException("Service dependencies are immutable");
-        }
+        if (!empty($name)) {
+            $name = (string) $name;
+            if (isset($this->dependencies[$name])) {
+                throw new ImmutableValueException("Service dependencies are immutable");
+            }
 
-        $this->dependencies[$name] = $descriptor;
+            $this->dependencies[$name] = $dependency;
+        } else {
+            $this->dependencies[] = $dependency;
+        }
 
         return $this;
     }

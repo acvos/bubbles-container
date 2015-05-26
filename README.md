@@ -21,13 +21,13 @@ $container = $bubbles->spawn();
 
 // Configuring dependencies
 $container
-    ->register('some_parameter', 200)
+    ->register('zzz', 200)
     ->register('test.service', 'Acvos\Bubbles\Example\TestService')
         ->addDependency('foo', 100)
-        ->addDependency('bar', '@some_parameter')
+        ->addDependency('bar', '@zzz')
     ->register('test.another.service', 'Acvos\Bubbles\Example\TestService')
-        ->addDependency('something', '@test.service')
-        ->addDependency('something_more', '@some_parameter');
+        ->addDependency('@test.service')
+        ->addDependency('zzz');
 
 // Getting our class instance as a DI service
 $service = $container->get('test.another.service');

@@ -18,11 +18,11 @@ interface DependentInterface
 {
     /**
      * Adds dependency
-     * @param string              $name       Dependency name
-     * @param DescriptorInterface $descriptor Dependency descriptor
+     * @param DescriptorInterface $dependency Dependency descriptor
+     * @param string              $name       Dependency name (optional)
      * @return $this
      */
-    public function addDependency($name, DescriptorInterface $descriptor);
+    public function addDependency(DescriptorInterface $dependency, $name = '');
 
     /**
      * Evaluates dependencies in given context

@@ -12,23 +12,23 @@ namespace Acvos\Bubbles\Service;
 use PHPUnit_Framework_TestCase;
 use StdClass;
 
-class PositionalBindingFactoryTest extends PHPUnit_Framework_TestCase
+class GenericServiceFactoryTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @expectedException Acvos\Bubbles\Service\BadConfigurationException
      */
     public function testConstructorWithBadClassName()
     {
-        $testObject = new PositionalBindingFactory('No\Such\Class');
+        $testObject = new GenericServiceFactory('No\Such\Class');
     }
 
     public function testCreate()
     {
-        $testObject = new PositionalBindingFactory('StdClass');
+        $testObject = new GenericServiceFactory('StdClass');
         $product = $testObject->create([]);
         $this->assertInstanceOf('StdClass', $product);
 
-        $testObject = new PositionalBindingFactory('ReflectionClass');
+        $testObject = new GenericServiceFactory('ReflectionClass');
         $product = $testObject->create(['StdClass']);
         $this->assertInstanceOf('ReflectionClass', $product);
     }
@@ -38,7 +38,7 @@ class PositionalBindingFactoryTest extends PHPUnit_Framework_TestCase
      */
     public function testCreateWithNotEnoughParameters()
     {
-        $testObject = new PositionalBindingFactory('ReflectionClass');
+        $testObject = new GenericServiceFactory('ReflectionClass');
         $product = $testObject->create([]);
     }
 
@@ -47,7 +47,7 @@ class PositionalBindingFactoryTest extends PHPUnit_Framework_TestCase
      */
     public function testCreateWithExtraParameters()
     {
-        $testObject = new PositionalBindingFactory('StdClass');
+        $testObject = new GenericServiceFactory('StdClass');
         $product = $testObject->create(['blah']);
     }
 }

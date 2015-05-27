@@ -23,7 +23,7 @@ class ServiceDescriptorFactory implements DescriptorFactoryInterface
      */
     public function create($value)
     {
-        $serviceFactory = new PositionalBindingFactory($value);
+        $serviceFactory = new GenericServiceFactory($value);
         $product = new ServiceDescriptor($serviceFactory);
 
         return $product;

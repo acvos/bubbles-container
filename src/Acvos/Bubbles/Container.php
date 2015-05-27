@@ -101,7 +101,7 @@ class Container implements ContainerInterface
     public function register($name, $descriptor)
     {
         $name = $this->normalizeName($name);
-        if (isset($this->scope[$name])){
+        if (isset($this->scope[$name])) {
             throw new ImmutableValueException("Container content is immutable: $name");
         }
 

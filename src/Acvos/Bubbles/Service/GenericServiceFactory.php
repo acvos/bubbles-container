@@ -37,16 +37,45 @@ class GenericServiceFactory implements ServiceFactoryInterface
     }
 
     /**
+     * Inject dependency into a service instance using setter method
+     * @param  object $instance Service object
+     * @param  string $name     Dependency name
+     * @param  mixed  $value    Dependency value
+     * @return $this
+     * @throws BadConfigurationException If setter method is not found for the dependency
+     */
+    private function setterInjection($instance, $name, $value)
+    {
+        if (is_callable([$instance, $name])) {
+            $methodName = $name;
+        } elseif (is_callable([$instance, 'set' . ucfirst($name)])) {
+            $methodName = 'set' . ucfirst($name);
+        } else {
+            throw new BadConfigurationException("Setter method not found for $name");
+        }
+
+        $instance->$methodName($value);
+
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function create(array $parameters)
     {
-        if (count($parameters) === 0) {
+        $reflector = new ConstructorReflector($this->className);
+        $constructorParameters = $reflector->extractConstructorParameters($parameters);
+
+        if (count($constructorParameters) === 0) {
             $service = new $this->className();
         } else {
-            $reflector = new ConstructorReflector($this->className);
-            $constructorParameters = $reflector->extractConstructorParameters($parameters);
             $service = $reflector->newInstanceArgs($constructorParameters);
+        }
+
+        $setterParameters = array_diff_key($parameters, $constructorParameters);
+        foreach ($setterParameters as $name => $value) {
+            $this->setterInjection($service, $name, $value);
         }
 
         return $service;

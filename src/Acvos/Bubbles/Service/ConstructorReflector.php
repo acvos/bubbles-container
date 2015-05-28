@@ -93,7 +93,7 @@ class ConstructorReflector
 
         $constructorParameters = [];
         foreach ($this->parameterNames as $name) {
-            $constructorParameters[] = $parameters[$name];
+            $constructorParameters[$name] = $parameters[$name];
         }
 
         return $constructorParameters;

@@ -23,8 +23,9 @@ $container = $bubbles->spawn();
 $container
     ->register('zzz', 200)
     ->register('test.service', 'Acvos\Bubbles\Example\TestService')
-        ->addDependency('foo', 100)
-        ->addDependency('bar', '@zzz')
+        ->addDependency('Setter injection example', 'bob')
+        ->addDependency('@zzz', 'bar')
+        ->addDependency(100, 'foo')
     ->register('test.another.service', 'Acvos\Bubbles\Example\TestService')
         ->addDependency('@test.service')
         ->addDependency('zzz');
